@@ -196,10 +196,23 @@ data.push({
 
 addDoc(
   collection(window.db, "records"),
+ addDoc(
+  collection(window.db, "records"),
   {
-    test: "hello",
-    time: new Date().toISOString()
+      date,
+      type:'normal',
+      st,
+      et,
+      s,
+      e,
+      note,
+      early,
+      late,
+      work
   }
+)
+.then(()=>console.log("Firestore 寫入成功"))
+.catch(err=>console.error(err));
 )
 .then(() => console.log("Firestore 寫入成功"))
 .catch(err => console.error(err));
