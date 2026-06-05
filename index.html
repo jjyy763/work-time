@@ -86,7 +86,9 @@ th,td{border:1px solid #ccc;padding:8px;text-align:center}
 </div>
 
 <script>
-let data=[];
+let data = JSON.parse(
+    localStorage.getItem("workRecords") || "[]"
+);
 
 function toggleMode(){
  const t=document.getElementById('type').value;
@@ -209,7 +211,14 @@ function render(){
  document.getElementById('totalLeave').textContent=leave+'小時';
  document.getElementById('totalEarly').textContent=fmt(totalEarly);
  document.getElementById('totalLate').textContent=fmt(totalLate);
+ localStorage.setItem(
+    "workRecords",
+    JSON.stringify(data)
+);
 }
+
+render();
+
 </script>
 
 </body>
