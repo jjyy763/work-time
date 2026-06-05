@@ -104,7 +104,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/fireba
 import {
   getFirestore,
   collection,
-  addDoc
+  addDoc,
+  getDocs
 }
 from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
@@ -124,6 +125,7 @@ const db = getFirestore(app);
 window.db = db;
 window.collection = collection;
 window.addDoc = addDoc;
+window.getDocs = getDocs;
 
 console.log("Firebase 已連線");
 </script>
@@ -320,7 +322,26 @@ data.sort((a,b)=>new Date(b.date)-new Date(a.date));
 );
 }
 
-render();
+async function loadFirebase(){
+
+  const snapshot =
+    await window.getDocs(
+      window.collection(window.db,"records")
+    );
+
+  data = [];
+
+  snapshot.forEach(doc=>{
+
+    data.push(doc.data());
+
+  });
+
+  render();
+
+}
+
+loadFirebase();
 
     function exportCSV(){
 
