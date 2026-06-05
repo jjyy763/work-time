@@ -161,6 +161,9 @@ function del(i){
 }
 
 function render(){
+    
+    data.sort((a,b)=>new Date(a.date)-new Date(b.date));
+    
  let html='';
  let totalWork=0,totalEarly=0,totalLate=0;
  let normalDays=0,special=0,leave=0;
