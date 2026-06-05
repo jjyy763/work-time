@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>工時紀錄器</title>
+<style>
+body{font-family:Arial,sans-serif;max-width:1400px;margin:auto;padding:20px}
+.row{display:flex;gap:10px;margin:8px 0}
+input,select,button{padding:8px}
+table{width:100%;border-collapse:collapse;margin-top:20px}
+th,td{border:1px solid #ccc;padding:8px;text-align:center}
+.hidden{display:none}
+.summary{margin-top:20px;line-height:1.8;font-weight:bold}
+</style>
+</head>
+<body>
+
+<h2>工時紀錄器</h2>
+
+<div class="row">
+<label>日期</label>
+<input type="date" id="date">
+</div>
+
+<div class="row">
+<label>類型</label>
+<select id="type" onchange="toggleMode()">
+<option value="normal">正常出勤</option>
+<option value="special">特別假</option>
+<option value="leave">請假</option>
+</select>
+</div>
+
+<div id="normalSection">
+<div class="row">
+<select id="startType">
+<option>內勤</option>
+<option>高鐵</option>
+<option>轎車</option>
+</select>
+<input type="time" id="startTime">
+</div>
+
+<div class="row">
+<select id="endType">
+<option>內勤</option>
+<option>高鐵</option>
+<option>轎車</option>
+</select>
+<input type="time" id="endTime">
+</div>
+</div>
+
+<div id="leaveSection" class="hidden">
+<div class="row">
+<label>時數</label>
+<input type="number" min="1" max="8" step="1" id="leaveHours">
+</div>
+</div>
+
+<button onclick="addRecord()">新增紀錄</button>
+
+<table>
+<thead>
+<tr>
+<th>日期</th>
+<th>類型</th>
+<th>內容</th>
+<th>提早出勤</th>
+<th>延後出勤</th>
+<th>認列工時</th>
+<th>刪除</th>
+</tr>
+</thead>
+<tbody id="records"></tbody>
+</table>
+
+<div class="summary">
+<div>總認列工時：<span id="totalWork">0分鐘</span></div>
+<div>平均工時(正常出勤)：<span id="avgWork">0分鐘</span></div>
+<div>總特別假：<span id="totalSpecial">0小時</span></div>
+<div>總請假：<span id="totalLeave">0小時</span></div>
+<div>累計提早出勤：<span id="totalEarly">0分鐘</span></div>
+<div>累計延後出勤：<span id="totalLate">0分鐘</span></div>
+</div>
+
+<script>
+let data=[];
+
+function toggleMode(){
+ const t=document.getElementById('type').value;
+ document.getElementById('normalSection').classList.toggle('hidden',t!=='normal');
+ document.getElementById('leaveSection').classList.toggle('hidden',t==='normal');
+}
+
+function tm(v){
+ const [h,m]=v.split(':').map(Number);
+ return h*60+m;
+}
+
+function fmt(min){
+ if(min<=0)return "0分鐘";
+ let h=Math.floor(min/60),m=min%60;
+ if(h===0)return m+"分鐘";
+ if(m===0)return h+"小時";
+ return h+"小時"+m+"分鐘";
+}
+
+function addRecord(){
+ const date=document.getElementById('date').value;
+ const type=document.getElementById('type').value;
+ if(!date){alert('請選日期');return;}
+
+ if(type!=='normal'){
+   const hrs=parseInt(document.getElementById('leaveHours').value||0);
+   if(!hrs){alert('請輸入時數');return;}
+   data.push({date,type,hours:hrs});
+   render();
+   return;
+ }
+
+ const st=document.getElementById('startType').value;
+ const et=document.getElementById('endType').value;
+ const s=document.getElementById('startTime').value;
+ const e=document.getElementById('endTime').value;
+ if(!s||!e){alert('請輸入時間');return;}
+
+ let start=tm(s), end=tm(e);
+ let adjStart=start, adjEnd=end;
+
+ if(st==="高鐵" && start<510) adjStart-=30;
+ if(et==="高鐵" && end>1050) adjEnd+=30;
+
+ let work = adjEnd - adjStart;
+
+if(work < 0){
+    work += 1440;
+}
+
+if(work > 540){
+    work -= 60;
+}
+
+ let early=Math.max(0,510-adjStart);
+ let late=Math.max(0,adjEnd-1050);
+
+ data.push({
+  date,type:'normal',st,et,s,e,
+  early,late,work
+ });
+
+ render();
+}
+
+function del(i){
+ data.splice(i,1);
+ render();
+}
+
+function render(){
+ let html='';
+ let totalWork=0,totalEarly=0,totalLate=0;
+ let normalDays=0,special=0,leave=0;
+
+ data.forEach((r,i)=>{
+   if(r.type==='normal'){
+      totalWork+=r.work;
+      totalEarly+=r.early;
+      totalLate+=r.late;
+      normalDays++;
+
+      html+=`<tr>
+      <td>${r.date}</td>
+      <td>正常出勤</td>
+      <td>${r.st} ${r.s} → ${r.et} ${r.e}</td>
+      <td>${fmt(r.early)}</td>
+      <td>${fmt(r.late)}</td>
+      <td>${fmt(r.work)}</td>
+      <td><button onclick="del(${i})">❌</button></td>
+      </tr>`;
+   }else if(r.type==='special'){
+      special+=r.hours;
+      html+=`<tr>
+      <td>${r.date}</td>
+      <td>特別假</td>
+      <td>${r.hours}小時</td>
+      <td>-</td><td>-</td>
+      <td>${r.hours}小時</td>
+      <td><button onclick="del(${i})">❌</button></td>
+      </tr>`;
+   }else{
+      leave+=r.hours;
+      html+=`<tr>
+      <td>${r.date}</td>
+      <td>請假</td>
+      <td>${r.hours}小時</td>
+      <td>-</td><td>-</td>
+      <td>${r.hours}小時</td>
+      <td><button onclick="del(${i})">❌</button></td>
+      </tr>`;
+   }
+ });
+
+ document.getElementById('records').innerHTML=html;
+ document.getElementById('totalWork').textContent=fmt(totalWork);
+ document.getElementById('avgWork').textContent=fmt(normalDays?Math.round(totalWork/normalDays):0);
+ document.getElementById('totalSpecial').textContent=special+'小時';
+ document.getElementById('totalLeave').textContent=leave+'小時';
+ document.getElementById('totalEarly').textContent=fmt(totalEarly);
+ document.getElementById('totalLate').textContent=fmt(totalLate);
+}
+</script>
+
+</body>
+</html>
