@@ -152,6 +152,8 @@ function fmt(min){
 }
 
 function addRecord(){
+console.log("addRecord開始");
+    
  const date=document.getElementById('date').value;
  const type=document.getElementById('type').value;
  if(!date){alert('請選日期');return;}
@@ -202,6 +204,9 @@ data.push({
   late,
   work
 });
+
+console.log("準備寫入Firestore");
+    
 window.addDoc(
   window.collection(window.db,"records"),
   {
