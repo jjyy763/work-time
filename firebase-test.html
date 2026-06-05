@@ -344,7 +344,9 @@ async function loadFirebase(){
 
 }
 
-loadFirebase();
+window.onload = function() {
+  loadFirebase();
+};
 
     function exportCSV(){
 
