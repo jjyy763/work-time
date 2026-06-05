@@ -105,7 +105,9 @@ import {
   getFirestore,
   collection,
   addDoc,
-  getDocs
+  getDocs,
+  deleteDoc,
+  doc
 }
 from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
@@ -126,6 +128,9 @@ window.db = db;
 window.collection = collection;
 window.addDoc = addDoc;
 window.getDocs = getDocs;
+
+window.deleteDoc = deleteDoc;
+window.doc = doc;
 
 console.log("Firebase 已連線");
 </script>
@@ -253,9 +258,19 @@ window.addDoc(
 render();
 }
 
-function del(i){
- data.splice(i,1);
- render();
+async function del(i){
+
+  await window.deleteDoc(
+    window.doc(
+      window.db,
+      "records",
+      data[i].id
+    )
+  );
+
+  data.splice(i,1);
+
+  render();
 }
 
 function render(){
@@ -359,10 +374,12 @@ async function loadFirebase(){
 
   snapshot.forEach(doc=>{
 
-    data.push(doc.data());
-
+  data.push({
+    id: doc.id,
+    ...doc.data()
   });
 
+});
   render();
 
 }
