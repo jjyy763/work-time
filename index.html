@@ -68,7 +68,8 @@ placeholder="例如：台南出差、教育訓練、客戶拜訪">
 </div>
 
 <button onclick="addRecord()">新增紀錄</button>
-
+<button onclick="exportCSV()">匯出Excel</button>
+    
 <table>
 <thead>
 <tr>
@@ -242,6 +243,47 @@ ${r.note ? `<br><small>備註：${r.note}</small>` : ''}
 
 render();
 
+    function exportCSV(){
+
+ let rows = [
+   ["日期","類型","內容","備註","提早出勤","延後出勤","認列工時"]
+ ];
+
+ data.forEach(r=>{
+
+   rows.push([
+     r.date || "",
+     r.type || "",
+     `${r.st || ""} ${r.s || ""} → ${r.et || ""} ${r.e || ""}`,
+     r.note || "",
+     r.early || 0,
+     r.late || 0,
+     r.work || r.hours || 0
+   ]);
+
+ });
+
+ const csv =
+ "\uFEFF" +
+ rows.map(r=>r.join(",")).join("\n");
+
+ const blob = new Blob(
+   [csv],
+   {type:"text/csv;charset=utf-8;"}
+ );
+
+ const link =
+ document.createElement("a");
+
+ link.href =
+ URL.createObjectURL(blob);
+
+ link.download =
+ "工時紀錄.csv";
+
+ link.click();
+}
+    
 </script>
 
 </body>
