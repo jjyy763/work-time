@@ -162,7 +162,9 @@ console.log("addRecord開始");
  if(!date){alert('請選日期');return;}
 
 if(type!=='normal'){
-
+const note =
+document.getElementById('note').value;
+    
    const hrs=parseInt(document.getElementById('leaveHours').value||0);
 
    if(!hrs){
@@ -171,20 +173,21 @@ if(type!=='normal'){
    }
 
    data.push({
-      date,
-      type,
-      hours:hrs
-   });
+   date,
+   type,
+   hours:hrs,
+   note
+});
 
    window.addDoc(
-      window.collection(window.db,"records"),
-      {
-         date,
-         type,
-         hours:hrs
-      }
-   );
-
+  window.collection(window.db,"records"),
+  {
+     date,
+     type,
+     hours:hrs,
+     note
+  }
+);
    render();
    return;
 }
@@ -300,7 +303,7 @@ data.sort((a,b)=>new Date(b.date)-new Date(a.date));
 
 <td>${r.hours}小時</td>
 
-<td></td>
+<td>${r.note || ''}</td>
 
 <td><button onclick="del(${i})">❌</button></td>
     </tr>`;
@@ -322,7 +325,7 @@ data.sort((a,b)=>new Date(b.date)-new Date(a.date));
 
 <td>${r.hours}小時</td>
 
-<td></td>
+<td>${r.note || ''}</td>
 
 <td><button onclick="del(${i})">❌</button></td>
     </tr>`;
