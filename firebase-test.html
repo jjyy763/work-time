@@ -326,26 +326,6 @@ async function loadFirebase(){
 
   console.log("開始讀取Firebase");
 
-  const snapshot =
-    await window.getDocs(
-      window.collection(window.db,"records")
-    );
-
-  console.log("文件數量",snapshot.size);
-
-  data = [];
-
-  snapshot.forEach(doc=>{
-
-    console.log(doc.data());
-
-    data.push(doc.data());
-
-  });
-
-  render();
-
-}
 
   const snapshot =
     await window.getDocs(
