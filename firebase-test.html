@@ -98,6 +98,26 @@ placeholder="例如：台南出差、教育訓練、客戶拜訪">
 <div>累計延後出勤：<span id="totalLate">0分鐘</span></div>
 </div>
 
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDtxfR46Pi-wZznaZyLK1jlPwb84IqlD-s",
+  authDomain: "work-time-5a318.firebaseapp.com",
+  projectId: "work-time-5a318",
+  storageBucket: "work-time-5a318.firebasestorage.app",
+  messagingSenderId: "950231535149",
+  appId: "1:950231535149:web:612b9300f52b51184fb2a4",
+  measurementId: "G-DD2YGESBY9"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+console.log("Firebase 已連線");
+</script>
+    
 <script>
 let data = JSON.parse(
     localStorage.getItem("workRecords") || "[]"
