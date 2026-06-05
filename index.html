@@ -81,6 +81,7 @@ placeholder="例如：台南出差、教育訓練、客戶拜訪">
 <th>提早出勤</th>
 <th>延後出勤</th>
 <th>認列工時</th>
+<th>備註</th>
 <th>刪除</th>
 </tr>
 </thead>
@@ -196,17 +197,17 @@ data.sort((a,b)=>new Date(b.date)-new Date(a.date));
       normalDays++;
 
       html+=`<tr>
-      <td>${r.date}</td>
-      <td>正常出勤</td>
-      <td>
-${r.st} ${r.s} → ${r.et} ${r.e}
-${r.note ? `<br><small>備註：${r.note}</small>` : ''}
-</td>
-      <td>${fmt(r.early)}</td>
-      <td>${fmt(r.late)}</td>
-      <td>${fmt(r.work)}</td>
-      <td><button onclick="del(${i})">❌</button></td>
-      </tr>`;
+<td>${r.date}</td>
+<td>正常出勤</td>
+<td>${r.st} ${r.s}</td>
+<td>${r.et} ${r.e}</td>
+<td>${fmt(r.early)}</td>
+<td>${fmt(r.late)}</td>
+<td>${fmt(r.work)}</td>
+<td>${r.note || ''}</td>
+<td><button onclick="del(${i})">❌</button></td>
+
+</tr>`;
    }else if(r.type==='special'){
       special+=r.hours;
       html+=`<tr>
