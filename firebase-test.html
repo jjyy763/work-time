@@ -196,27 +196,11 @@ data.push({
 
 addDoc(
   collection(window.db, "records"),
- addDoc(
-  collection(window.db, "records"),
   {
-      date,
-      type:'normal',
-      st,
-      et,
-      s,
-      e,
-      note,
-      early,
-      late,
-      work
-  }
-)
-.then(()=>console.log("Firestore 寫入成功"))
-.catch(err=>console.error(err));
-)
-.then(() => console.log("Firestore 寫入成功"))
-.catch(err => console.error(err));
-
+    date,
+    type:'normal',
+    st,
+   
 render();
 }
 
