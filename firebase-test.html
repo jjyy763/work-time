@@ -161,13 +161,33 @@ console.log("addRecord開始");
  const type=document.getElementById('type').value;
  if(!date){alert('請選日期');return;}
 
- if(type!=='normal'){
+if(type!=='normal'){
+
    const hrs=parseInt(document.getElementById('leaveHours').value||0);
-   if(!hrs){alert('請輸入時數');return;}
-   data.push({date,type,hours:hrs});
+
+   if(!hrs){
+      alert('請輸入時數');
+      return;
+   }
+
+   data.push({
+      date,
+      type,
+      hours:hrs
+   });
+
+   window.addDoc(
+      window.collection(window.db,"records"),
+      {
+         date,
+         type,
+         hours:hrs
+      }
+   );
+
    render();
    return;
- }
+}
 
  const st=document.getElementById('startType').value;
  const et=document.getElementById('endType').value;
