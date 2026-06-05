@@ -209,27 +209,46 @@ data.sort((a,b)=>new Date(b.date)-new Date(a.date));
 <td><button onclick="del(${i})">❌</button></td>
 
 </tr>`;
-   }else if(r.type==='special'){
-      special+=r.hours;
-      html+=`<tr>
-      <td>${r.date}</td>
-      <td>特別假</td>
-      <td>${r.hours}小時</td>
-      <td>-</td><td>-</td>
-      <td>${r.hours}小時</td>
-      <td><button onclick="del(${i})">❌</button></td>
-      </tr>`;
-   }else{
-      leave+=r.hours;
-      html+=`<tr>
-      <td>${r.date}</td>
-      <td>請假</td>
-      <td>${r.hours}小時</td>
-      <td>-</td><td>-</td>
-      <td>${r.hours}小時</td>
-      <td><button onclick="del(${i})">❌</button></td>
-      </tr>`;
-   }
+}else if(r.type==='special'){
+    special+=r.hours;
+
+    html+=`<tr>
+    <td>${r.date}</td>
+    <td>特別假</td>
+
+    <td>-</td>
+    <td>-</td>
+
+    <td>-</td>
+    <td>-</td>
+
+    <td>0分鐘</td>
+
+    <td></td>
+
+    <td><button onclick="del(${i})">❌</button></td>
+    </tr>`;
+}
+}else{
+    leave+=r.hours;
+
+    html+=`<tr>
+    <td>${r.date}</td>
+    <td>請假</td>
+
+    <td>-</td>
+    <td>-</td>
+
+    <td>-</td>
+    <td>-</td>
+
+    <td>0分鐘</td>
+
+    <td></td>
+
+    <td><button onclick="del(${i})">❌</button></td>
+    </tr>`;
+}
  });
 
  document.getElementById('records').innerHTML=html;
