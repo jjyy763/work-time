@@ -194,7 +194,17 @@ data.push({
   work
 });
 
- render();
+addDoc(
+  collection(window.db, "records"),
+  {
+    test: "hello",
+    time: new Date().toISOString()
+  }
+)
+.then(() => console.log("Firestore 寫入成功"))
+.catch(err => console.error(err));
+
+render();
 }
 
 function del(i){
