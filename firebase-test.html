@@ -100,7 +100,12 @@ placeholder="例如：台南出差、教育訓練、客戶拜訪">
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+import {
+  getFirestore,
+  collection,
+  addDoc
+}
+from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDtxfR46Pi-wZznaZyLK1jlPwb84IqlD-s",
@@ -114,6 +119,10 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+window.db = db;
+window.collection = collection;
+window.addDoc = addDoc;
 
 console.log("Firebase 已連線");
 </script>
@@ -193,7 +202,23 @@ data.push({
   late,
   work
 });
-
+window.addDoc(
+  window.collection(window.db,"records"),
+  {
+    date,
+    type:'normal',
+    st,
+    et,
+    s,
+    e,
+    note,
+    early,
+    late,
+    work
+  }
+)
+.then(()=>console.log("Firestore寫入成功"))
+.catch(err=>console.error(err));
 render();
 }
 
