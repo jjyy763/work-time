@@ -52,11 +52,6 @@ th,td{border:1px solid #ccc;padding:8px;text-align:center}
 </div>
 </div>
 
-<div class="row">
-<label>備註</label>
-<input type="text" id="note" placeholder="例如：台南出差、教育訓練、客戶拜訪">
-</div>
-
 <div id="leaveSection" class="hidden">
 <div class="row">
 <label>時數</label>
@@ -91,7 +86,6 @@ th,td{border:1px solid #ccc;padding:8px;text-align:center}
 </div>
 
 <script>
-    
 let data = JSON.parse(
     localStorage.getItem("workRecords") || "[]"
 );
@@ -132,7 +126,6 @@ function addRecord(){
  const et=document.getElementById('endType').value;
  const s=document.getElementById('startTime').value;
  const e=document.getElementById('endTime').value;
- const note=document.getElementById('note').value;
  if(!s||!e){alert('請輸入時間');return;}
 
  let start=tm(s), end=tm(e);
@@ -154,18 +147,10 @@ if(work > 540){
  let early=Math.max(0,510-adjStart);
  let late=Math.max(0,adjEnd-1050);
 
-data.push({
-  date,
-  type:'normal',
-  st,
-  et,
-  s,
-  e,
-  note,
-  early,
-  late,
-  work
-});
+ data.push({
+  date,type:'normal',st,et,s,e,
+  early,late,work
+ });
 
  render();
 }
@@ -190,10 +175,7 @@ function render(){
       html+=`<tr>
       <td>${r.date}</td>
       <td>正常出勤</td>
-<td>
-${r.st} ${r.s} → ${r.et} ${r.e}
-${r.note ? `<br><small>備註：${r.note}</small>` : ''}
-</td>
+      <td>${r.st} ${r.s} → ${r.et} ${r.e}</td>
       <td>${fmt(r.early)}</td>
       <td>${fmt(r.late)}</td>
       <td>${fmt(r.work)}</td>
@@ -235,7 +217,6 @@ ${r.note ? `<br><small>備註：${r.note}</small>` : ''}
 );
 }
 
-document.getElementById('note').value='';
 render();
 
 </script>
