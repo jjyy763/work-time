@@ -92,28 +92,6 @@ th,td{border:1px solid #ccc;padding:8px;text-align:center}
 
 <script>
     
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
-
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs
-} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDtxfR46Pi-wZznaZyLK1jlPwb84IqlD-s",
-  authDomain: "work-time-5a318.firebaseapp.com",
-  projectId: "work-time-5a318",
-  storageBucket: "work-time-5a318.firebasestorage.app",
-  messagingSenderId: "950231535149",
-  appId: "1:950231535149:web:612b9300f52b51184fb2a4",
-  measurementId: "G-DD2YGESBY9"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-    
 let data = JSON.parse(
     localStorage.getItem("workRecords") || "[]"
 );
