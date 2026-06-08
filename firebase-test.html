@@ -279,14 +279,27 @@ async function del(i){
 }
 
 function render(){
+
+const filterMonth =
+document.getElementById('filterMonth')?.value || '';
     
-data.sort((a,b)=>new Date(b.date)-new Date(a.date));  
+data.sort((a,b)=>
+  new Date(b.date || 0) -
+  new Date(a.date || 0)
+);
     
  let html='';
  let totalWork=0,totalEarly=0,totalLate=0;
  let normalDays=0,special=0,leave=0;
 
  data.forEach((r,i)=>{
+
+  if(
+    filterMonth &&
+    !r.date?.startsWith(filterMonth)
+  ){
+    return;
+  }
    if(r.type==='normal'){
       totalWork+=r.work;
       totalEarly+=r.early;
