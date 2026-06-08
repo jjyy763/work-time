@@ -412,9 +412,19 @@ window.onload = function() {
    ["日期","類型","內容","備註","提早出勤","延後出勤","認列工時"]
  ];
 
- data.forEach(r=>{
+const filterMonth =
+document.getElementById("filterMonth").value;
+        
+data.forEach(r=>{
 
-   rows.push([
+    if(
+      filterMonth &&
+      !r.date?.startsWith(filterMonth)
+    ){
+      return;
+    }
+
+    rows.push([
      r.date || "",
      r.type || "",
      `${r.st || ""} ${r.s || ""} → ${r.et || ""} ${r.e || ""}`,
