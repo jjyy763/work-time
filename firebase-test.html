@@ -383,7 +383,7 @@ onchange="toggleLate(${i})"
 
 <td>-</td>
 
-<td>${r.hours}小時</td>
+<td>${fmt(r.hours)}</td>
 
 <td>${r.note || ''}</td>
 
@@ -407,7 +407,7 @@ onchange="toggleLate(${i})"
 
 <td>-</td>
 
-<td>${r.hours}小時</td>
+<td>${fmt(r.hours)}</td>
 
 <td>${r.note || ''}</td>
 
@@ -419,8 +419,8 @@ onchange="toggleLate(${i})"
  document.getElementById('records').innerHTML=html;
  document.getElementById('totalWork').textContent=fmt(totalWork);
  document.getElementById('avgWork').textContent=fmt(normalDays?Math.round(totalWork/normalDays):0);
- document.getElementById('totalSpecial').textContent=special+'小時';
- document.getElementById('totalLeave').textContent=leave+'小時';
+document.getElementById('totalSpecial').textContent=fmt(special);
+document.getElementById('totalLeave').textContent=fmt(leave);
  document.getElementById('totalEarly').textContent=fmt(totalEarly);
  document.getElementById('totalLate').textContent=fmt(totalLate);
  localStorage.setItem(
