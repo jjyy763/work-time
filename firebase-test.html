@@ -67,13 +67,6 @@ id="note"
 placeholder="例如：台南出差、教育訓練、客戶拜訪">
 </div>
 
-<div class="row">
-<label></label>
-<label>
-<input type="checkbox" id="countLate">
-延後出勤計入認列工時
-</label>
-</div>
     
 <div id="leaveSection" class="hidden">
 <div class="row">
@@ -95,6 +88,7 @@ placeholder="例如：台南出差、教育訓練、客戶拜訪">
 <th>提早出勤</th>
 <th>延後出勤</th>
 <th>認列工時</th>
+<th>延後認列</th>
 <th>請假時數</th>
 <th>備註</th>
 <th>刪除</th>
@@ -226,18 +220,13 @@ document.getElementById('note').value;
 let early = Math.max(0,510-adjStart);
 let late = Math.max(0,adjEnd-1050);
 
-const countLate =
-document.getElementById('countLate').checked;
+
 
 let work;
 
 if(et==="內勤"){
 
     work = 480;
-
-    if(countLate){
-        work += late;
-    }
 
 }else{
 
@@ -265,7 +254,7 @@ data.push({
   early,
   late,
   work,
-  countLate
+  countLate:false
 });
 
 console.log("準備寫入Firestore");
@@ -283,7 +272,7 @@ window.addDoc(
     early,
     late,
     work,
-    countLate
+   countLate:false
   }
 )
 .then(()=>console.log("Firestore寫入成功"))
@@ -291,6 +280,24 @@ window.addDoc(
 render();
 }
 
+function toggleLate(i){
+
+  data[i].countLate =
+    !data[i].countLate;
+
+  if(data[i].et === "內勤"){
+
+    data[i].work =
+      data[i].countLate
+      ? 480 + data[i].late
+      : 480;
+
+  }
+
+  render();
+
+}
+    
 async function del(i){
 
   await window.deleteDoc(
@@ -342,7 +349,17 @@ data.sort((a,b)=>
 <td>${fmt(r.early)}</td>
 <td>${fmt(r.late)}</td>
 <td>${fmt(r.work)}</td>
+
+<td>
+<input
+type="checkbox"
+${r.countLate ? "checked" : ""}
+onchange="toggleLate(${i})"
+>
+</td>
+
 <td>-</td>
+
 <td>${r.note || ''}</td>
 <td><button onclick="del(${i})">❌</button></td>
 
