@@ -236,6 +236,9 @@ if(work > 540){
  let early=Math.max(0,510-adjStart);
  let late=Math.max(0,adjEnd-1050);
 
+const countLate =
+document.getElementById('countLate').checked;
+    
 data.push({
   date,
   type:'normal',
@@ -246,7 +249,8 @@ data.push({
   note,
   early,
   late,
-  work
+  work,
+  countLate
 });
 
 console.log("準備寫入Firestore");
@@ -263,7 +267,8 @@ window.addDoc(
     note,
     early,
     late,
-    work
+    work,
+    countLate
   }
 )
 .then(()=>console.log("Firestore寫入成功"))
