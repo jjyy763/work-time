@@ -212,8 +212,8 @@ document.getElementById('note').value;
  let start=tm(s), end=tm(e);
  let adjStart=start, adjEnd=end;
 
- if(st==="高鐵" && start<510) adjStart-=30;
- if(et==="高鐵" && end>1050) adjEnd+=30;
+ if((st==="高鐵" || st==="轎車") && start<510) adjStart-=30;
+ if((et==="高鐵" || et==="轎車") && end>1050) adjEnd+=30;
 
  let work = adjEnd - adjStart;
 
