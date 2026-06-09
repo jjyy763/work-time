@@ -337,10 +337,14 @@ data.sort((a,b)=>
   ){
     return;
   }
-   if(r.type==='normal'){
+if(r.type==='normal'){
       totalWork+=r.work;
       totalEarly+=r.early;
-      totalLate+=r.late;
+
+      if(r.countLate){
+         totalLate+=r.late;
+      }
+
       normalDays++;
 
       html+=`<tr>
