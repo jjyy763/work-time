@@ -186,19 +186,19 @@ document.getElementById('note').value;
       return;
    }
 
-   data.push({
+data.push({
    date,
    type,
-   hours:hrs,
+   hours:hrs * 60,
    note
 });
-
+    
    window.addDoc(
   window.collection(window.db,"records"),
   {
      date,
      type,
-     hours:hrs,
+     hours:hrs * 60,
      note
   }
 );
