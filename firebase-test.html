@@ -383,7 +383,7 @@ onchange="toggleLate(${i})"
 
 <td>-</td>
 
-<td>${fmt(r.hours)}</td>
+<td>${fmt(r.hours < 24 ? r.hours * 60 : r.hours)}</td>
 
 <td>${r.note || ''}</td>
 
@@ -407,7 +407,7 @@ onchange="toggleLate(${i})"
 
 <td>-</td>
 
-<td>${fmt(r.hours)}</td>
+<td>${fmt(r.hours < 24 ? r.hours * 60 : r.hours)}</td>
 
 <td>${r.note || ''}</td>
 
