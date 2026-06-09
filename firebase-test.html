@@ -114,8 +114,8 @@ import {
   addDoc,
   getDocs,
   deleteDoc,
-  doc,
-  updateDoc
+  updateDoc,
+  doc
 }
 from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
@@ -478,6 +478,77 @@ window.onload = function() {
   loadFirebase();
 };
 
+async function recalculateAllRecords(){
+
+  for(const r of data){
+
+    if(r.type !== "normal") continue;
+
+    let start = tm(r.s);
+    let end = tm(r.e);
+
+    let adjStart = start;
+    let adjEnd = end;
+
+    if(r.st==="高鐵" || r.st==="轎車"){
+      adjStart -= 30;
+    }
+
+    if(r.et==="高鐵" || r.et==="轎車"){
+      adjEnd += 30;
+    }
+
+    let early = Math.max(0,510-adjStart);
+    let late = Math.max(0,adjEnd-1050);
+
+    let work;
+
+    if(r.et==="內勤"){
+
+      work =
+        r.countLate
+        ? 480 + late
+        : 480;
+
+    }else{
+
+      work = adjEnd - adjStart;
+
+      if(work < 0){
+        work += 1440;
+      }
+
+      if(work > 540){
+        work -= 60;
+      }
+
+    }
+
+    r.early = early;
+    r.late = late;
+    r.work = work;
+
+    await window.updateDoc(
+      window.doc(
+        window.db,
+        "records",
+        r.id
+      ),
+      {
+        early,
+        late,
+        work
+      }
+    );
+
+  }
+
+  render();
+
+  console.log("全部重算完成");
+
+}
+    
     function exportCSV(){
 
  let rows = [
