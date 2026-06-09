@@ -218,8 +218,11 @@ data.push({
  let start=tm(s), end=tm(e);
  let adjStart=start, adjEnd=end;
 
- if((st==="高鐵" || st==="轎車") && start<510) adjStart-=30;
- if((et==="高鐵" || et==="轎車") && end>1050) adjEnd+=30;
+if(st==="高鐵" || st==="轎車")
+    adjStart-=30;
+
+if(et==="高鐵" || et==="轎車")
+    adjEnd+=30;
 
 let early = Math.max(0,510-adjStart);
 let late = Math.max(0,adjEnd-1050);
